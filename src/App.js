@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { createStore, combineReducers } from 'redux';
+import { connect, Provider } from 'react-redux';
 
 
 function counter(state = 0, action) {
@@ -30,34 +31,59 @@ let reducer = combineReducers({
 let store = createStore(reducer);
 
 
-class App extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      counter: this.props.counter || 0
-    }
-    store.subscribe(() => {
-      let state = store.getState();
-      this.setState({
-        counter: state.counter,
-        text: state.text
-      })
-    });
+const mapStateToProps = state => {
+  return {
+    counter: state.counter,
+    text: state.text
   }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onClickIncrement: event => {
+      dispatch({type: 'INCREMENT'});
+    },
+    onClickDecrement: event => {
+      dispatch({type: 'DECREMENT'});
+    },
+    onTextChange: event => {
+      dispatch({type: 'UPDATE_TEXT', text: event.target.value});
+    }
+  }
+}
+
+
+class RootView extends Component {
 
   render() {
     return (
       <div>
-        <button onClick={() => store.dispatch({type: 'INCREMENT'})}>+</button>
-        <h4 style={{display: 'inline'}}>{this.state.counter}</h4>
-        <button onClick={() => store.dispatch({type: 'DECREMENT'})}>-</button>
+        <button onClick={this.props.onClickIncrement}>+</button>
+        <h4 style={{display: 'inline'}}>{this.props.counter}</h4>
+        <button onClick={this.props.onClickDecrement}>-</button>
         <hr />
-        What is your name? <input type="text" onChange={(event) => store.dispatch({type: 'UPDATE_TEXT', text: event.target.value})} />
-        <h5>Your name is {this.state.text}</h5>
+        What is your name? <input type="text" onChange={this.props.onTextChange} />
+        <h5>Your name is {this.props.text}</h5>
       </div>
     );
   }
 }
+
+RootView = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RootView);
+
+
+class App extends Component {
+  render() {
+    return(
+      <Provider store={store}>
+        <RootView />
+      </Provider>
+    );
+  }
+}
+
 
 export default App;
