@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { createStore } from 'redux';
+import { createStore, combineReducers } from 'redux';
 
 
 function counter(state = 0, action) {
@@ -13,7 +13,21 @@ function counter(state = 0, action) {
   }
 }
 
-let store = createStore(counter);
+function text(state = '', action) {
+  switch(action.type) {
+    case 'UPDATE_TEXT':
+      return action.text;
+    default:
+      return state;
+  }
+}
+
+let reducer = combineReducers({
+  counter,
+  text
+});
+
+let store = createStore(reducer);
 
 
 class App extends Component {
@@ -23,17 +37,24 @@ class App extends Component {
     this.state = {
       counter: this.props.counter || 0
     }
-    store.subscribe(() => this.setState({counter: store.getState()}));
+    store.subscribe(() => {
+      let state = store.getState();
+      this.setState({
+        counter: state.counter,
+        text: state.text
+      })
+    });
   }
 
   render() {
     return (
       <div>
         <button onClick={() => store.dispatch({type: 'INCREMENT'})}>+</button>
-        <br />
-        <h4>{this.state.counter}</h4>
-        <br />
+        <h4 style={{display: 'inline'}}>{this.state.counter}</h4>
         <button onClick={() => store.dispatch({type: 'DECREMENT'})}>-</button>
+        <hr />
+        What is your name? <input type="text" onChange={(event) => store.dispatch({type: 'UPDATE_TEXT', text: event.target.value})} />
+        <h5>Your name is {this.state.text}</h5>
       </div>
     );
   }
