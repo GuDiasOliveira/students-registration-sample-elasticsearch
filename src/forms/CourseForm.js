@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
+import { TextField, NumberField } from './MuiComponents';
+import { Button } from '@material-ui/core'
 
 
 class CourseForm extends Component {
@@ -9,18 +11,15 @@ class CourseForm extends Component {
     return(
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="name">Course name</label>
-          <Field name="name" component="input" type="text" />
+          <Field name="name" component={TextField} floatingLabelText="Course name" />
         </div>
         <div>
-          <label htmlFor="area">Area</label>
-          <Field name="area" component="input" type="text" />
+          <Field name="area" component={TextField} floatingLabelText="Area" />
         </div>
         <div>
-          <label htmlFor="duration">Duration (months)</label>
-          <Field name="duration" component="input" type="number" min="0" step="1" />
+          <Field name="duration" component={NumberField} min="0" step="1" floatingLabelText="Duration (months)" />
         </div>
-        <button type="submit">Done</button>
+        <Button type="submit" variant="contained" color="primary">Done</Button>
       </form>
     );
   }

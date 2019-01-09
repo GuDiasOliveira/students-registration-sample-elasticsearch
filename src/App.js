@@ -3,6 +3,9 @@ import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import { reducer as formReducer } from 'redux-form';
 
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 import CourseForm from './forms/CourseForm';
 
 
@@ -17,7 +20,9 @@ class App extends Component {
   render() {
     return(
       <Provider store={store}>
-        <CourseForm onSubmit={values => alert(JSON.stringify(values, null, 2))} />
+        <MuiThemeProvider muiTheme={getMuiTheme()}>
+          <CourseForm onSubmit={values => alert(JSON.stringify(values, null, 2))} />
+        </MuiThemeProvider>
       </Provider>
     );
   }
