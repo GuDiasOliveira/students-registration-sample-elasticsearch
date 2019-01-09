@@ -1,25 +1,39 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { createStore } from 'redux';
+
+
+function counter(state = 0, action) {
+  switch(action.type) {
+    case 'INCREMENT':
+      return state + 1;
+    case 'DECREMENT':
+      return state - 1;
+    default:
+      return state;
+  }
+}
+
+let store = createStore(counter);
+
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      counter: this.props.counter || 0
+    }
+    store.subscribe(() => this.setState({counter: store.getState()}));
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>
+        <button onClick={() => store.dispatch({type: 'INCREMENT'})}>+</button>
+        <br />
+        <h4>{this.state.counter}</h4>
+        <br />
+        <button onClick={() => store.dispatch({type: 'DECREMENT'})}>-</button>
       </div>
     );
   }
