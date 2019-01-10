@@ -3,7 +3,6 @@ import TextField from 'material-ui/TextField'
 import { RadioButtonGroup } from 'material-ui/RadioButton'
 import Checkbox from 'material-ui/Checkbox'
 import SelectField from 'material-ui/SelectField'
-import NumberField from 'material-ui-number-input'
 
 
 let MuiTextField = ({
@@ -57,17 +56,3 @@ let MuiSelectField = ({
   />
 )
 export { MuiSelectField as SelectField };
-
-
-let MuiNumberField = ({
-  input,
-  meta: { touched, error },
-  ...custom
-}) => (
-  <NumberField
-    errorText={touched && error}
-    {...input}
-    {...custom}
-  />
-);
-export { MuiNumberField as NumberField };

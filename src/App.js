@@ -7,9 +7,12 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import CourseForm from './forms/CourseForm';
+import CourseView from './views/CoursesView';
+import courses from './reducers/courses';
 
 
 const reducer = combineReducers({
+  courses,
   form: formReducer
 });
 
@@ -21,7 +24,10 @@ class App extends Component {
     return(
       <Provider store={store}>
         <MuiThemeProvider muiTheme={getMuiTheme()}>
-          <CourseForm onSubmit={values => alert(JSON.stringify(values, null, 2))} />
+          <div>
+            <CourseForm />
+            <CourseView />
+          </div>
         </MuiThemeProvider>
       </Provider>
     );
