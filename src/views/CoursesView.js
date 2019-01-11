@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import { Button } from '@material-ui/core';
+import { TableRow, TableHead, TableCell, TableBody, Table } from '@material-ui/core';
+
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import { connect } from 'react-redux';
 
@@ -17,7 +16,7 @@ const mapStateToProps = state => (
 class CoursesView extends Component {
 
   render() {
-    const { courses } = this.props;
+    const { courses, dispatch } = this.props;
     return(
       <Table>
         <TableHead>
@@ -35,6 +34,11 @@ class CoursesView extends Component {
               <TableCell>{course.name}</TableCell>
               <TableCell>{course.area}</TableCell>
               <TableCell>{course.duration}</TableCell>
+              <TableCell>
+                <Button vairant="contained" onClick={() => dispatch({type: 'COURSE_DELETE', courseId: course._id})}>
+                  <DeleteIcon />
+                </Button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
