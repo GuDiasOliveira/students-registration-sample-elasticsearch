@@ -7,8 +7,11 @@ import { connect } from 'react-redux';
 
 
 const mapDispatchToProps = dispatch => ({
-  handleInsertCourse: values => {
-    dispatch({ type: 'COURSE_INSERT', course: values });
+  handleSaveCourse: values => {
+    if (values._id)
+      dispatch({ type: 'COURSE_UPDATE', course: values });
+    else
+      dispatch({ type: 'COURSE_INSERT', course: values });
   }
 });
 
@@ -16,13 +19,14 @@ const mapDispatchToProps = dispatch => ({
 class CourseForm extends Component {
 
   submitForm(values) {
-    this.props.handleInsertCourse(values);
-    console.log(this.props);
-    this.props.reset();
+    values._id = this.props.editCourseId;
+    this.props.handleSaveCourse(values);
+    this.props.setToCreateMode();
+    this.props.initialize({});
   }
   
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, editCourseId } = this.props;
     return(
       <form onSubmit={handleSubmit(this.submitForm.bind(this))}>
         <div>
@@ -34,7 +38,7 @@ class CourseForm extends Component {
         <div>
           <Field name="duration" component={TextField} floatingLabelText="Duration (months)" />
         </div>
-        <Button type="submit" variant="contained" color="primary">Done</Button>
+        <Button type="submit" variant="contained" color="primary">{editCourseId ? `Update #${editCourseId}` : 'New'}</Button>
       </form>
     );
   }

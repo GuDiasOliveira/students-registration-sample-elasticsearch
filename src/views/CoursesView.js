@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Button } from '@material-ui/core';
 import { TableRow, TableHead, TableCell, TableBody, Table } from '@material-ui/core';
 
-import DeleteIcon from '@material-ui/icons/Delete';
+import { Delete as DeleteIcon, Edit as EditIcon } from '@material-ui/icons';
 
 import { connect } from 'react-redux';
 
@@ -16,7 +16,7 @@ const mapStateToProps = state => (
 class CoursesView extends Component {
 
   render() {
-    const { courses, dispatch } = this.props;
+    const { courses, dispatch, onEditCourse } = this.props;
     return(
       <Table>
         <TableHead>
@@ -35,9 +35,14 @@ class CoursesView extends Component {
               <TableCell>{course.area}</TableCell>
               <TableCell>{course.duration}</TableCell>
               <TableCell>
-                <Button vairant="contained" onClick={() => dispatch({type: 'COURSE_DELETE', courseId: course._id})}>
-                  <DeleteIcon />
-                </Button>
+                <span>
+                  <Button vairant="secondary" onClick={() => dispatch({type: 'COURSE_DELETE', courseId: course._id})}>
+                    <DeleteIcon />
+                  </Button>
+                  <Button variant="primary" onClick={ () => onEditCourse(course) }>
+                    <EditIcon />
+                  </Button>
+                </span>
               </TableCell>
             </TableRow>
           ))}

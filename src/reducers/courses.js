@@ -6,6 +6,10 @@ const courses = (state = [], action) => {
     case 'COURSE_INSERT':
       action.course._id = ++coursesIdCount;
       return [...state, action.course];
+    case 'COURSE_UPDATE':
+      return state.map(course => {
+        return course._id === action.course._id ? action.course : course;
+      });
     case 'COURSE_DELETE':
       return state.filter(course => {
         return course._id !== action.courseId;
