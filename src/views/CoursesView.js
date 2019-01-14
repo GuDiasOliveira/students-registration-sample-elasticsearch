@@ -16,7 +16,7 @@ const mapStateToProps = state => (
 class CoursesView extends Component {
 
   render() {
-    const { courses, dispatch, onEditCourse } = this.props;
+    const { courses, dispatch, onEditCourse, onRefreshCoursesList } = this.props;
     return(
       <Table>
         <TableHead>
@@ -36,7 +36,7 @@ class CoursesView extends Component {
               <TableCell>{course.duration}</TableCell>
               <TableCell>
                 <span>
-                  <Button vairant="secondary" onClick={() => dispatch({type: 'COURSE_DELETE', courseId: course._id})}>
+                  <Button vairant="secondary" onClick={() => dispatch({type: 'COURSE_DELETE', courseId: course._id, updateListCallback: onRefreshCoursesList})}>
                     <DeleteIcon />
                   </Button>
                   <Button variant="primary" onClick={ () => onEditCourse(course) }>
