@@ -5,22 +5,41 @@ import { Button } from '@material-ui/core'
 
 import { connect } from 'react-redux';
 
+import axios from 'axios';
+
 
 const mapDispatchToProps = dispatch => ({
-  handleSaveCourse: values => {
+  handleSaveCourse: (values, updateListCallback) => {
     if (values._id)
-      dispatch({ type: 'COURSE_UPDATE', course: values });
+      dispatch({ type: 'COURSE_UPDATE', course: values, updateListCallback });
     else
-      dispatch({ type: 'COURSE_INSERT', course: values });
+      dispatch({ type: 'COURSE_INSERT', course: values, updateListCallback });
+  },
+  refreshCoursesList: courses => {
+    if (courses)
+      dispatch({ type: 'COURSE_LIST', courses });
+    else
+      axios.get('http://localhost:9200/_search?index=course')
+        .then(response => (response.data.hits.hits.map(hit => ({_id: hit._id, ...hit._source}))))
+        .then(courses2 => dispatch({ type: 'COURSE_LIST', courses: courses2 }))
+        .catch(err => {
+          console.error('Failed to retrieve courses');
+          console.error(err);
+        })
   }
 });
 
 
 class CourseForm extends Component {
 
+  constructor(props) {
+    super(props);
+    this.props.refreshCoursesList();
+  }
+
   submitForm(values) {
     values._id = this.props.editCourseId;
-    this.props.handleSaveCourse(values);
+    this.props.handleSaveCourse(values, this.props.refreshCoursesList);
     this.props.setToCreateMode();
     this.props.initialize({});
   }
